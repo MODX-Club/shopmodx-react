@@ -187,7 +187,7 @@ export class AppMain extends ReactCmsApp{
     Object.assign(this.state, {
       notifications_store: notifications_store,
       inited: false,
-      developMode: false,
+      developMode: true,
       order: {},
       menuItems: [],
     }, createStores());
