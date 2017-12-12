@@ -9,8 +9,6 @@ import {Link} from 'react-router';
 
 import MainMenu from '../MainMenu';
 
-import Basket from 'modules/Site/components/Basket';
-
 export default class Header extends Component{
 
 	static propTypes = {
@@ -19,7 +17,7 @@ export default class Header extends Component{
  
 	
 	static contextTypes = {
-
+    Basket: PropTypes.func.isRequired,
 	};
 
 
@@ -33,6 +31,10 @@ export default class Header extends Component{
 	} 
 	
 	render(){
+
+    const {
+      Basket,
+    } = this.context;
 
 		return <Grid
       container

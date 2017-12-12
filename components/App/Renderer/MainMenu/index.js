@@ -10,9 +10,7 @@ import LoginIcon from 'material-ui-icons/PermIdentity';
 import AddIcon from 'material-ui-icons/Add';
 import AtentionIcon from 'material-ui-icons/ErrorOutline';
 
-import Avatar from 'modules/Site/components/fields/User/avatar.js';
-
-import WsProxy from 'shopmodx-react/components/WsProxy';
+import WsProxy from '../../../WsProxy';
 
 import cookies from 'js-cookie';
 
@@ -26,6 +24,7 @@ export default class MainMenu extends Component{
     router: PropTypes.object.isRequired,
     document: PropTypes.object.isRequired,
     menuItems: PropTypes.array.isRequired,
+    Avatar: PropTypes.func.isRequired,
   };
 
 
@@ -104,6 +103,7 @@ export default class MainMenu extends Component{
       },
       userActions,
       menuItems,
+      Avatar,
     } = this.context;
 
     const {

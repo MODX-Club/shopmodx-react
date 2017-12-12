@@ -8,9 +8,9 @@ import IconButton from 'material-ui/IconButton';
 
 import {white, red500, yellow500, blue500} from 'material-ui/styles/colors';
 
-import * as proxyActions from 'modules/Redux/actions/proxyActions';
-import * as userActions from 'modules/Redux/actions/userActions';
-import * as documentActions from 'modules/Redux/actions/documentActions';
+import * as proxyActions from '../Redux/actions/proxyActions';
+import * as userActions from '../Redux/actions/userActions';
+import * as documentActions from '../Redux/actions/documentActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 

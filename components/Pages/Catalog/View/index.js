@@ -12,8 +12,6 @@ import {Link} from 'react-router';
 import ProductCart from 'shopmodx-react/components/Pages/Catalog/View/List/Product';
 import CategoryCart from 'shopmodx-react/components/Pages/Catalog/View/List/Category';
 
-import Pagination from 'modules/Site/components/pagination';
-
 export default class CatalogView extends Component{
 
 	static propTypes = {
@@ -27,7 +25,7 @@ export default class CatalogView extends Component{
 	};
  
 	static contextTypes = {
-
+		Pagination: PropTypes.func.isRequired,
 	};
 
 
@@ -52,6 +50,10 @@ export default class CatalogView extends Component{
 
 	
 	render(){
+
+		const {
+			Pagination,
+		} = this.context;
 
 		const {
 			modxResource,

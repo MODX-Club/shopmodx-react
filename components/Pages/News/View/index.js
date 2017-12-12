@@ -9,8 +9,6 @@ import Paper from 'material-ui/Paper';
 
 import {Link} from 'react-router';
 
-import Pagination from 'modules/Site/components/pagination';
-
 
 export default class NewsView extends Component{
 
@@ -21,7 +19,7 @@ export default class NewsView extends Component{
 
 	
 	static contextTypes = {
-
+		Pagination: PropTypes.func.isRequired,
 	};
 
 
@@ -46,6 +44,10 @@ export default class NewsView extends Component{
 
 	
 	render(){
+
+		const {
+			Pagination,
+		} = this.context;
 
 		const {
 			modxResource,

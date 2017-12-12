@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 
 import PropTypes from 'prop-types';
 
-import * as proxyActions from 'modules/Redux/actions/proxyActions';
-import * as userActions from 'modules/Redux/actions/userActions';
-import * as documentActions from 'modules/Redux/actions/documentActions';
+import * as proxyActions from '../Redux/actions/proxyActions';
+import * as userActions from '../Redux/actions/userActions';
+import * as documentActions from '../Redux/actions/documentActions';
 
 import customPropTypes from 'material-ui/utils/customPropTypes';
 import { lightBlue } from 'material-ui/styles/colors';
@@ -25,13 +25,19 @@ import {DataStore, Dispatcher} from 'react-cms-data-view';
 
 import ReactCmsApp from 'react-cms/src/app/components/App';
 
-import Renderer from 'modules/Site/components/App/Renderer';
+
  
 import {
   buildExecutionContext,
   buildResolveInfo,
   getOperationRootType,
 } from 'graphql/execution/execute';
+
+
+import Renderer from './Renderer';
+import Basket from '../Basket';
+import Avatar from '../fields/User/avatar';
+import Pagination from '../pagination';
 
  
 export const createStores = function(){
@@ -84,18 +90,25 @@ const customStyles = createMuiTheme({
 
 export class MainApp extends Component{
 
+  static propTypes = {
+    defaultQuery: PropTypes.string.isRequired,
+  };
+
   static childContextTypes = {
     appExports: PropTypes.object,
+    defaultQuery: PropTypes.string,
   };
 
   getChildContext() {
 
     let {
       appExports,
+      defaultQuery,
     } = this.props;
 
     let context = {
       appExports,
+      defaultQuery,
     };
 
     return context;
@@ -119,6 +132,10 @@ let {
 
 Object.assign(defaultProps, {
   connector_url: '/assets/components/modxsite/connectors/connector.php',
+  Renderer,
+  Basket,
+  Avatar,
+  Pagination,
 });
 
 
@@ -127,6 +144,10 @@ let {
 } = ReactCmsApp.propTypes || {};
 
 Object.assign(propTypes, {
+  Renderer: PropTypes.func.isRequired,
+  Basket: PropTypes.func.isRequired,
+  Avatar: PropTypes.func.isRequired,
+  Pagination: PropTypes.func.isRequired,
   document: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
 });
@@ -137,6 +158,9 @@ let {
 } = ReactCmsApp.childContextTypes || {};
 
 Object.assign(childContextTypes, {
+  Basket: PropTypes.func,
+  Avatar: PropTypes.func,
+  Pagination: PropTypes.func,
   order: PropTypes.object,              // Текущий объект заказа пользователя
   menuItems: PropTypes.array,  // Пункты меню
   addToBasket: PropTypes.func,
@@ -157,6 +181,9 @@ export class AppMain extends ReactCmsApp{
   getChildContext() {
 
     let {
+      Basket,
+      Avatar,
+      Pagination,
     } = this.props;
 
     let {
@@ -172,6 +199,9 @@ export class AppMain extends ReactCmsApp{
       addToBasket: ::this.addToBasket,
       recalculateBasket: ::this.recalculateBasket,
       submitOrder: ::this.submitOrder,
+      Basket,
+      Avatar,
+      Pagination,
     });
 
     return context;
@@ -462,6 +492,7 @@ export class AppMain extends ReactCmsApp{
   render() {
 
     let {
+      Renderer,
       children, 
       user,
       ...other
