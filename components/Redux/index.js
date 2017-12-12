@@ -1,4 +1,6 @@
-export default from './reducers';
+import * as reducers from './reducers';
+
+module.exports = reducers;
 
 // export default reducers;
 
