@@ -383,13 +383,10 @@ export default class DefaultPage extends Page{
 
     await super.onLocationChanged();
 
-    console.log("onLocationChanged", this.state);
 
     const {
     	title,
     } = this.state;
-
-    console.log("onLocationChanged title", title);
 
     title && this.setPageTitle(title);
 

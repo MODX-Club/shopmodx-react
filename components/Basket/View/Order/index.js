@@ -152,8 +152,6 @@ export default class OrderView extends Component{
 			console.error(e);
 		});
 
-		console.log("Order submit result", result);
-
 		this.setState({
 			errors,
 		});
@@ -162,8 +160,6 @@ export default class OrderView extends Component{
 
 
 	onFocus = (event) => {
-
-		console.log("onFocus event", event);
 
 		const {
 			name,

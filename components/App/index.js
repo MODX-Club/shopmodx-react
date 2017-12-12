@@ -39,6 +39,14 @@ import Basket from '../Basket';
 import Avatar from '../fields/User/avatar';
 import Pagination from '../pagination';
 
+
+import defaultQuery from '../ORM/query';
+import rootResolver from '../ORM/resolver';
+
+import RootType, {
+  Mutation,
+  rootDirectives,
+} from '../ORM';
  
 export const createStores = function(){
 
@@ -88,27 +96,75 @@ const customStyles = createMuiTheme({
 
 
 
+// export class MainApp extends Component{
+
+//   static propTypes = {
+//     defaultQuery: PropTypes.string.isRequired,
+//     rootResolver: PropTypes.func.isRequired,
+//     RootType: PropTypes.object.isRequired,
+//     Mutation: PropTypes.object,
+//     rootDirectives: PropTypes.array,
+//   };
+
+//   static childContextTypes = {
+//     appExports: PropTypes.object,
+//     defaultQuery: PropTypes.string,
+//     rootResolver: PropTypes.func,
+//     RootType: PropTypes.object,
+//     Mutation: PropTypes.object,
+//     rootDirectives: PropTypes.array,
+//   };
+
+//   getChildContext() {
+
+//     let {
+//       appExports,
+//       defaultQuery,
+//       rootResolver,
+//       RootType,
+//       Mutation,
+//       rootDirectives,
+//     } = this.props;
+
+//     let context = {
+//       appExports,
+//       defaultQuery,
+//       rootResolver,
+//       RootType,
+//       Mutation,
+//       rootDirectives,
+//     };
+
+//     return context;
+//   }
+
+//   render(){
+
+//     return this.props.children;
+
+//   }
+
+// }
+
+
 export class MainApp extends Component{
 
   static propTypes = {
-    defaultQuery: PropTypes.string.isRequired,
+    appExports: PropTypes.object.isRequired,
   };
 
   static childContextTypes = {
     appExports: PropTypes.object,
-    defaultQuery: PropTypes.string,
   };
 
   getChildContext() {
 
     let {
       appExports,
-      defaultQuery,
     } = this.props;
 
     let context = {
       appExports,
-      defaultQuery,
     };
 
     return context;
@@ -126,18 +182,6 @@ export class MainApp extends Component{
   Инициируется один раз
 */
 
-let {
-  ...defaultProps
-} = ReactCmsApp.defaultProps || {};
-
-Object.assign(defaultProps, {
-  connector_url: '/assets/components/modxsite/connectors/connector.php',
-  Renderer,
-  Basket,
-  Avatar,
-  Pagination,
-});
-
 
 let {
   ...propTypes
@@ -150,6 +194,29 @@ Object.assign(propTypes, {
   Pagination: PropTypes.func.isRequired,
   document: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+
+  // defaultQuery: PropTypes.string.isRequired,
+  // rootResolver: PropTypes.func.isRequired,
+  // RootType: PropTypes.object.isRequired,
+  // Mutation: PropTypes.object,
+  // rootDirectives: PropTypes.array,
+});
+
+let {
+  ...defaultProps
+} = ReactCmsApp.defaultProps || {};
+
+Object.assign(defaultProps, {
+  connector_url: '/assets/components/modxsite/connectors/connector.php',
+  Renderer,
+  Basket,
+  Avatar,
+  Pagination,
+  defaultQuery,
+  rootResolver,
+  RootType,
+  Mutation,
+  rootDirectives,
 });
 
 
@@ -166,6 +233,13 @@ Object.assign(childContextTypes, {
   addToBasket: PropTypes.func,
   recalculateBasket: PropTypes.func,
   submitOrder: PropTypes.func,
+
+  // appExports: PropTypes.object,
+  defaultQuery: PropTypes.string,
+  rootResolver: PropTypes.func,
+  RootType: PropTypes.object,
+  Mutation: PropTypes.object,
+  rootDirectives: PropTypes.array,
 });
 
 export class AppMain extends ReactCmsApp{
@@ -184,6 +258,14 @@ export class AppMain extends ReactCmsApp{
       Basket,
       Avatar,
       Pagination,
+      // appExports,
+
+      defaultQuery,
+      rootResolver,
+      RootType,
+      Mutation,
+      rootDirectives,
+
     } = this.props;
 
     let {
@@ -202,6 +284,12 @@ export class AppMain extends ReactCmsApp{
       Basket,
       Avatar,
       Pagination,
+      // appExports,
+      defaultQuery,
+      rootResolver,
+      RootType,
+      Mutation,
+      rootDirectives,
     });
 
     return context;
@@ -213,7 +301,6 @@ export class AppMain extends ReactCmsApp{
 
     let notifications_store = new DataStore(new Dispatcher());
   
-
     Object.assign(this.state, {
       notifications_store: notifications_store,
       inited: false,
@@ -312,7 +399,7 @@ export class AppMain extends ReactCmsApp{
 
     }
 
-    return;
+    return super.componentWillMount && super.componentWillMount();
 
   }
 
