@@ -22,18 +22,18 @@ import {
 } from 'react-cms/src/server/components/ORM/SiteContent';
 
 
-import MODXResourceType from 'shopmodx-react/components/ORM/MODXResource';
+import MODXResourceType from 'shopmodx-react/components/ORM/modResource';
 
 import {
   getList as getMODXResourcesList,
-} from './MODXResource';
+} from './modResource';
 
 
-import UserType from 'modules/Site/components/ORM/User';
+import UserType from 'shopmodx-react/components/ORM/modUser';
 
 import {
   getList as getUsersList,
-} from './User';
+} from './modUser';
 
 
 

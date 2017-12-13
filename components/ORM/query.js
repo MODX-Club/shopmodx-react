@@ -141,11 +141,11 @@ query CurrentUser(
 }
 
 
-fragment User on UserType {
+fragment User on ShopModxUserType {
   ...UserFields
 }
 
-fragment UserFields on UserType{
+fragment UserFields on ShopModxUserType{
   id
   username
   fullname
@@ -782,7 +782,6 @@ mutation OrderSubmit(
   }
   
 }
-
 
 
 `;

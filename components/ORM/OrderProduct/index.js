@@ -26,7 +26,7 @@ import {
 } from '../fields';
 
 
-import MODXResourceType from '../MODXResource';
+import MODXResourceType from '../modResource';
 
 
 export const OrderProductArgs = {

@@ -42,11 +42,11 @@ import {
 import MODXResourceType, {
   MODXResourceArgs,
   MODXResourcesArgs,
-} from './MODXResource';
+} from './modResource';
 
 import UserType, {
   UsersArgs,
-} from './User';
+} from './modUser';
 
 
 import OrderType, {

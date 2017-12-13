@@ -48,7 +48,7 @@ import {
 
 import MODXResourceType, {
   getList as getMODXResourcesList,
-} from './MODXResource';
+} from './modResource';
 
 
 const getObjectsList = function(ofType, source, args, context, info){
