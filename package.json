@@ -23,7 +23,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "modx-react": "^1.0.1"
   }

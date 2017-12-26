@@ -607,7 +607,7 @@ export class AppMain extends ReactCmsApp{
 }
 
 
-function mapDispatchToProps(dispatch) {
+export const mapDispatchToProps = function(dispatch) {
 
   let props = {
     proxyActions: bindActionCreators(proxyActions, dispatch),
@@ -620,7 +620,7 @@ function mapDispatchToProps(dispatch) {
   return props;
 }
 
-function mapStateToProps(state) {
+export const mapStateToProps = function (state) {
 
   var currentState = {};
 
