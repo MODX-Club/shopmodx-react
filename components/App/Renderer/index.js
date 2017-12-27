@@ -36,7 +36,13 @@ var styleSheet = createStyleSheet('InteractiveLayout', (theme) => {
   return css;
 });
 
+
 export default class Renderer extends Component{
+
+
+  static defaultProps = {
+    Header,
+  };
 
 
   static contextTypes = {
@@ -82,6 +88,7 @@ export default class Renderer extends Component{
       children,
       authOpen,
       notifications_store,
+      Header,
     } = this.props;
 
     const {
@@ -91,7 +98,7 @@ export default class Renderer extends Component{
       className="MainApp"
     >
 
-      <Header />
+      {Header && <Header /> || null}
       
       {children}
 

@@ -1,4 +1,9 @@
 
+1.2.2
+========================================
+- Renderer refactoring
+
+
 1.2.1
 ========================================
 - Added mapDispatchToProps and mapStateToProps to module.exports
