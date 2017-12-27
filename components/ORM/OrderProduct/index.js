@@ -44,63 +44,62 @@ export const OrdersProductsArgs = Object.assign({
   },
 }, listArgs);
 
+export const OrderProductFields = {
+  id: {
+    type: GraphQLInt,
+    description: "ID",
+  },
+  order_id: {
+    type: GraphQLInt,
+    description: "ID заказа",
+  },
+  product_id: {
+    type: GraphQLInt,
+    description: "ID товара",
+  },
+  quantity: {
+    type: GraphQLInt,
+    description: "Количество",
+  },
+  price: {
+    type: GraphQLFloat,
+    description: "Стоимость",
+  },
+  Product: {
+    type: MODXResourceType,
+    description: "Товар",
+    resolve: (source, args, context, info) => {
+
+      const {
+        product_id,
+      } = source;
+
+      // console.log("product_id", product_id);
+
+      if(!product_id){
+        return null;
+      }
+
+      const {
+        rootResolver,
+      } = context;
+
+      Object.assign(args, {
+        id: product_id,
+        // _store: "remote",
+      });
+
+      return rootResolver(null, args, context, info);
+
+    },
+  },
+};
+
 
 const OrderProductType = new GraphQLObjectType({
   name: 'OrderProductType',
   description: 'Позиция заказа',
-  fields: () => {
-
-    return { 
-      id: {
-        type: GraphQLInt,
-        description: "ID",
-      },
-      order_id: {
-        type: GraphQLInt,
-        description: "ID заказа",
-      },
-      product_id: {
-        type: GraphQLInt,
-        description: "ID товара",
-      },
-      quantity: {
-        type: GraphQLInt,
-        description: "Количество",
-      },
-      price: {
-        type: GraphQLFloat,
-        description: "Стоимость",
-      },
-      Product: {
-        type: MODXResourceType,
-        description: "Товар",
-        resolve: (source, args, context, info) => {
-
-          const {
-            product_id,
-          } = source;
-
-          // console.log("product_id", product_id);
-
-          if(!product_id){
-            return null;
-          }
-
-          const {
-            rootResolver,
-          } = context;
-
-          Object.assign(args, {
-            id: product_id,
-            // _store: "remote",
-          });
-
-          return rootResolver(null, args, context, info);
-
-        },
-      },
-    };
-  },
+  fields: () => (OrderProductFields),
 });
 
 

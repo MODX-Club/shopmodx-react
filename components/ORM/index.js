@@ -53,14 +53,14 @@ import OrderType, {
   OrderArgs,
   OrdersArgs,
   OrderMutations,
-} from './Order';
+} from 'modules/Site/components/ORM/Order';
 
 
 
 import OrderProductType, {
   OrderProductArgs,
   OrdersProductsArgs,
-} from './OrderProduct';
+} from 'modules/Site/components/ORM/OrderProduct';
 
 
 

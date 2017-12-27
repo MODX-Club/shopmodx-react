@@ -18,9 +18,9 @@ export default class Router extends ReactCmsRouter{
 
   constructor(options = {}){
 
-    Object.assign(options, {
+    options = Object.assign({
       Response,
-    });
+    }, options);
 
     super(options);
 
