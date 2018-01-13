@@ -1,7 +1,10 @@
 
 
 /*
-	Оформление заказа
+	Оформление заказа.
+
+	Этот компонент рассчитан на отображение заказа только из контекста
+
 */
 
 import React, { Component } from 'react';
@@ -18,18 +21,26 @@ import {Link} from 'react-router';
 
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
-import NumberFormat from 'react-number-format';
+// import NumberFormat from 'react-number-format';
+
+import OrderProductsView from './OrderProducts';
+
 
 export default class OrderView extends Component{
 
 	static propTypes = {
-
+		OrderProductsView: PropTypes.func.isRequired,
 	};
-
+	
+	
+	static defaultProps = {
+		OrderProductsView,
+	};
+	
 	
 	static contextTypes = {
-		user: PropTypes.object.isRequired,
 		order: PropTypes.object.isRequired,
+		user: PropTypes.object.isRequired,
 		recalculateBasket: PropTypes.func.isRequired,
 		submitOrder: PropTypes.func.isRequired,
 		documentActions: PropTypes.object.isRequired,
@@ -186,11 +197,12 @@ export default class OrderView extends Component{
 
 		const {
 			modxResource,
+			OrderProductsView,
 		} = this.props;
 
-		if(!modxResource){
-			return null;
-		}
+		// if(!modxResource){
+		// 	return null;
+		// }
 
 		const {
 			order,
@@ -200,7 +212,7 @@ export default class OrderView extends Component{
 			id,
 			pagetitle,
 			content,
-		} = modxResource;
+		} = modxResource || {};
 
 
 		const {
@@ -230,7 +242,6 @@ export default class OrderView extends Component{
 		else{
 
 			const {
-				Products,
 				status_id,
 			} = order;
 
@@ -372,110 +383,11 @@ export default class OrderView extends Component{
 
 
 			output = <div>
-				
-				<Paper 
-					style={{
-						padding: 10,
-						overflow: "auto",
-					}}
-				>
-		      <Table>
-		        <TableHead>
-		          <TableRow>
-		            <TableCell></TableCell>
-		            <TableCell>Наименование</TableCell>
-		            <TableCell>Количество</TableCell>
-		            <TableCell>Стоимость</TableCell>
-		            <TableCell>Сумма</TableCell>
-		          </TableRow>
-		        </TableHead>
-		        <TableBody>
-		          {Products && Products.map(n => {
 
-		          	const {
-		          		id,
-		          		quantity,
-		          		price,
-		          		Product,
-		          	} = n;
-
-		          	const {
-		          		pagetitle,
-		          		uri,
-		          		imageFormats,
-		          	} = Product;
-
-		          	const {
-		          		thumb,
-		          	} = imageFormats || {};
-
-		          	const sum = quantity * price;
-
-		          	const link = `/${uri}`;
-
-		            return (
-		              <TableRow key={id}>
-		                <TableCell>
-		                	<Link
-		                		to={link}
-		                		href={link}
-		                		title={pagetitle}
-		                	>
-			                	{thumb && <img 
-			                		src={thumb}
-			                	/> || ""}
-		                	</Link>
-		                </TableCell>
-		                <TableCell>
-		                	<Link
-		                		to={link}
-		                		href={link}
-		                		title={pagetitle}
-		                	>
-		                		{pagetitle}
-		                	</Link>
-		                </TableCell>
-		                <TableCell >
-		                	
-		                	<TextField 
-		                		value={quantity || 0}
-		                		type="number"
-		                		name="quantity"
-		                		disabled={status_id === 1 ? false : true}
-		                		onChange={event => {
-
-		                			let {
-		                				value: quantity,
-		                			} = event.target;
-
-		                			quantity = quantity > 0 ? quantity : 0;
-
-		                			this.addToBasket(n, quantity);
-
-		                		}}
-		                	/>
-
-		                </TableCell>
-		                <TableCell >
-		                	<NumberFormat 
-		                		value={price}
-												thousandSeparator=" "
-		                		displayType="text"
-		                	/> руб.
-		                </TableCell>
-		                <TableCell >
-		                	<NumberFormat 
-		                		value={sum}
-												thousandSeparator=" "
-		                		displayType="text"
-		                	/> руб.
-		                </TableCell>
-		              </TableRow>
-		            );
-		          }) || null}
-		        </TableBody>
-		      </Table>
-		    </Paper>
+				<OrderProductsView 
+					order={order}
+					addToBasket={::this.addToBasket}
+				/>
 
 		    {orderForm}
 

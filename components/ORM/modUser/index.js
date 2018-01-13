@@ -8,7 +8,10 @@ import {
   GraphQLEnumType,
   GraphQLFloat,
   GraphQLBoolean,
+  GraphQLNonNull,
 } from 'graphql';
+
+import GraphQLJSON from 'graphql-type-json';
 
 import { List } from 'immutable';
 
@@ -26,6 +29,7 @@ import {
 
 const {
   UserFields,
+  Mutations,
 } = MODXUser;
 
 import OrderType from '../Order';
@@ -38,13 +42,46 @@ const ShopModxUserFields = Object.assign({...UserFields}, {
     resolve: (source, args, context, info) => {
 
       const {
+        id,
+      } = source;
+
+      if(!id){
+        return null;
+      }
+
+      const {
         rootResolver,
       } = context;
 
       Object.assign(args, {
-        // id: product_id,
-        // _store: "remote",
-        ownOrder: true,     // Поулчить только текущий заказ
+        contractor: id,
+        ownOrder: true,     // Получить только текущий заказ
+      });
+
+      return rootResolver(null, args, context, info);
+
+    },
+  },
+
+  Orders: {
+    type: new GraphQLList(OrderType),
+    description: "Все заказы пользователя",
+    resolve: (source, args, context, info) => {
+
+      const {
+        id,
+      } = source;
+
+      if(!id){
+        return null;
+      }
+
+      const {
+        rootResolver,
+      } = context;
+
+      Object.assign(args, {
+        contractor: id,
       });
 
       return rootResolver(null, args, context, info);
@@ -61,8 +98,25 @@ export const UserType = new GraphQLObjectType({
   fields: () => (ShopModxUserFields),
 });
 
+
+// Переопределяем тип пользователя в мутациях
+
+let {
+  ...ShopModxUserMutations,
+} = Mutations;
+
+let {
+  updateUser,
+} = ShopModxUserMutations;
+
+Object.assign(updateUser, {
+  type: UserType,
+});
+
+
 Object.assign(MODXUser, {
   UserType,
+  Mutations: ShopModxUserMutations,
   default: UserType,
 });
 

@@ -89,6 +89,15 @@ export default class MainMenu extends Component{
   // }
   
  
+  getMenuItems(){
+
+    const {
+      menuItems = [],
+    } = this.context;
+
+    return menuItems;
+
+  }
 
 
 	render(){
@@ -102,9 +111,10 @@ export default class MainMenu extends Component{
         user,
       },
       userActions,
-      menuItems,
       Avatar,
     } = this.context;
+
+    const menuItems = this.getMenuItems();
 
     const {
       username,
@@ -140,12 +150,14 @@ export default class MainMenu extends Component{
 
         <div 
           id="navbar-main" 
-          className="collapse navbar-collapse navbar-right"
+          className="collapse navbar-collapse"
           style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             padding: 10,
+            justifyContent: "flex-end",
+            flexWrap: "wrap",
           }}
         > 
           
@@ -194,9 +206,9 @@ export default class MainMenu extends Component{
                 }}
               >
                 
-                <a 
-                  id="office" 
-                  href="javascript:;" 
+                <Link 
+                  to={`/profile/${user.username}/`}
+                  href={`/profile/${user.username}/`}
                   data-toggle="dropdown" 
                   className="dropdown-toggle flex align-center"
                   style={{
@@ -213,7 +225,7 @@ export default class MainMenu extends Component{
                     }}
                   />
 
-                </a>
+                </Link>
 
                 <a 
                   href="javascript:;"

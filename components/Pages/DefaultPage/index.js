@@ -81,7 +81,14 @@ export default class DefaultPage extends Page{
 			page,
 		} = query || {};
 
-		let result = await provider({
+		let result = await super.loadServerData(provider, options);
+
+		if(!result){
+			return null;
+		}
+
+
+		let resoursResult = await provider({
 			operationName: "MODXResourceByUri",
 			variables: {
 				modxResourceUri: pathname,
@@ -97,108 +104,12 @@ export default class DefaultPage extends Page{
 		});
 
 
-		if(!result){
-			return null;
-		}
-
-
-
-		/*
-			На стороне сервера получаем данные текущего пользователя 
-			и прочие данные, которые получить надо только один раз
-		*/
-		if(typeof window === "undefined"){
-			
-			// Получаем текущего пользователя
-			await provider({
-				operationName: "CurrentUser",
-				variables: {
-					// userGetOrder: true,
-					// orderGetProducts: true,
-					// orderProductGetProduct: true,
-					getImageFormats: true,
-				},
-				req,
-			})
-			.then(r => {
-
-				const {
-					user,
-				} = r.data;
-
-				Object.assign(result.data, {
-					user,
-				});
-
-				// console.log("DefaultPage CurrentUser", r);
-
-			})
-			.catch(e => {
-				throw(e);
-			});
-
-
-			// Получаем текущий заказ
-			await provider({
-				operationName: "OwnOrder",
-				variables: {
-					orderGetProducts: true,
-					orderProductGetProduct: true,
-					getImageFormats: true,
-				},
-				req,
-			})
-			.then(r => {
-
-				const {
-					order,
-				} = r.data;
-
-				Object.assign(result.data, {
-					order,
-				});
-
-				// console.log("DefaultPage CurrentUser", r);
-
-			})
-			.catch(e => {
-				console.error(e);
-			});
-
-			/*
-				Здесь получаем только данные, необходымые для инициализации на стороне сервера
-			*/
-
-			// Получаем донные для основного меню
-			await provider({
-				operationName: "MainMenuData",
-				variables: {
-				},
-				req,
-			})
-			.then(r => {
-
-				const {
-					menuItems,
-				} = r.data;
-
-				Object.assign(result.data, {
-					menuItems,
-				});
-
-			})
-			.catch(e => {
-				throw(e);
-			});
-
-		}
-
 
 		// console.log("DefaultPage result", result);
 
 		const {
 			modxResource,
-		} = result.data || {};
+		} = resoursResult.data || {};
 
 
 		if(!modxResource){
@@ -222,6 +133,7 @@ export default class DefaultPage extends Page{
 			Object.assign(result.data, {
 				title,
 				description,
+				modxResource,
 			});
 
 		}
@@ -437,7 +349,7 @@ export default class DefaultPage extends Page{
 		const {
 			id,
 			template,
-		} = modxResource;
+		} = modxResource || {};
 
 
 		// Этот компонент отвечает за отображение

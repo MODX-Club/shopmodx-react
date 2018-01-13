@@ -56,60 +56,67 @@ export default class ShopModxMiniBasketView extends Component{
 			positions,
 		} = order || {};
 
-		return <Link
-			to="/order/"
-			href="/order/"
-			rel="nofollow"
-			title="Корзина"
+		return <div
 			style={{
 				display: "flex",
-		    flexDirection: "row-reverse",
-		    alignItems: "center",
+				justifyContent: "flex-end",
 			}}
 		>
-
-			<div
+			<Link
+				to="/order/"
+				href="/order/"
+				rel="nofollow"
+				title="Корзина"
 				style={{
-					paddingLeft: 10,
+					display: "inline-flex",
+					alignItems: "center",
+					flexDirection: "row-reverse",
 				}}
 			>
-				
-					<div>
-						{total > 0 ? <span>
-							{total} <Decliner 
-								num={total}
-								words={['товар', 'товара', 'товаров']}
-							/>
-						</span> : "Корзина пуста"}
-					</div>
 
-					<div>
-						{positions > 0 ? <span>
-							{positions} <Decliner 
-								num={positions}
-								words={['позиция', 'позиции', 'позиций']}
-							/>
-						</span> : null}
-					</div>
+				<div
+					style={{
+						paddingLeft: 10,
+					}}
+				>
 					
-					{sum > 0 && <div>
-						<NumberFormat
-							value={sum}
-							thousandSeparator=" "
-							displayType="text"
-						/> <Decliner 
-							num={sum}
-							words={['рубль', 'рубля', 'рублей']}
-						/>
-					</div> || null }
+						<div>
+							{total > 0 ? <span>
+								{total} <Decliner 
+									num={total}
+									words={['товар', 'товара', 'товаров']}
+								/>
+							</span> : "Корзина пуста"}
+						</div>
 
-			</div>
-			
-			<BasketIcon 
-				color={total > 0 ? 'green' : undefined}
-			/> 
+						<div>
+							{positions > 0 ? <span>
+								{positions} <Decliner 
+									num={positions}
+									words={['позиция', 'позиции', 'позиций']}
+								/>
+							</span> : null}
+						</div>
+						
+						{sum > 0 && <div>
+							<NumberFormat
+								value={sum}
+								thousandSeparator=" "
+								displayType="text"
+							/> <Decliner 
+								num={sum}
+								words={['рубль', 'рубля', 'рублей']}
+							/>
+						</div> || null }
+
+				</div>
+				
+				<BasketIcon 
+					color={total > 0 ? 'green' : undefined}
+				/> 
 
 
-		</Link>
+			</Link>
+		</div>
 	}
 }

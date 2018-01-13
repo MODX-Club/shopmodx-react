@@ -33,6 +33,7 @@ import UserType from 'shopmodx-react/components/ORM/modUser';
 
 import {
   getList as getUsersList,
+  update as updateUser,
 } from './modUser';
 
 
@@ -45,6 +46,12 @@ import {
   orderRecalculate,
   orderSubmit,
 } from './Order';
+
+
+import {
+  OrderStatusType,
+  getList as getOrdersStatusesList,
+} from './OrderStatus';
 
 
 
@@ -151,6 +158,19 @@ const rootResolver = (source, args, context, info) => {
         if(returnType === OrderType){
 
           result = orderSubmit(null, args, context, info);
+
+          return result;
+
+        }
+
+        break;
+
+
+      case "updateUser":
+
+        if(returnType === UserType){
+
+          result = updateUser(null, args, context, info);
 
           return result;
 
@@ -266,6 +286,12 @@ const getObjectsList = (ofType, source, args, context, info) => {
     else if(ofType === OrderType){
 
       resolver = getOrdersList;
+        
+    }
+
+    else if(ofType === OrderStatusType){
+
+      resolver = getOrdersStatusesList;
         
     }
 

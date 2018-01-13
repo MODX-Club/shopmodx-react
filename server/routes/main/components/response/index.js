@@ -98,19 +98,19 @@ import rootResolver from '../ORM/resolver';
 // import defaultQuery from 'modules/ReactCMS/components/ORM/query';
 
 
-import ReactCmsQuery from 'react-cms/src/app/components/ORM/query';
+// import ReactCmsQuery from 'react-cms/src/app/components/ORM/query';
 
 // import OrmQuery from 'modules/ReactCMS/components/ORM/query';
 
-import OrmQuery from 'modules/Site/components/ORM/query';
+import defaultQuery from 'modules/Site/components/ORM/query';
 
-const defaultQuery = `
-${OrmQuery}
+// const defaultQuery = `
+// ${OrmQuery}
 
-#ReactCmsQuery
-${ReactCmsQuery}
+// #ReactCmsQuery
+// ${ReactCmsQuery}
 
-`;
+// `;
 
 
 
@@ -2163,12 +2163,6 @@ export default class Response{
             // });
           }
 
-          // console.error("remoteQuery result error", result);
-
-          // console.error("remoteQuery result JSON error", JSON.stringify(result));
-
-          // debug("localQuery result", debugParams);
-          // debug("localQuery location result", location, params);
 
           return resolve(result);
         })

@@ -1,90 +1,11 @@
-const defaultQuery = `
 
 
-## Default
-query EditorState {
-  editorState{
-    ...EditorState
-  }
-}
+import ReactCmsQuery from 'react-cms/src/app/components/ORM/query';
 
-fragment EditorState on CommentEditorStateType{
-  blocks{
-    data
-    depth
-    entityRanges
-    inlineStyleRanges
-    key
-    text
-    type
-  }
-  entityMap{
-    __typename
-    
-    ... on EditorEntityDefaultType{
-      type
-      mutability
-      ...EditorEntity
-    }
-    
-    ... on EditorEntityGalleryType{
-      ...EditorEntityGallery
-      type
-      mutability
-    }
-    
-    ... on EditorEntityLinkType{
-      type
-      data{
-        target
-        title
-        url
-        _map
-      }
-    }
-    
-    ... on EditorEntityImageType{
-      type
-      mutability
-      data{
-        src
-      }
-    }
-    
-  }
-}
+import mergeQuery from 'react-cms-graphql-utils/src/mergeQuery';
 
-fragment EditorEntity on EditorEntityDefaultType{
-  type
-  mutability
-  data{
-    gallery{
-      image
-    }
-    target
-    title
-    url
-    _map
-  }
-}
 
-fragment EditorEntityGallery on EditorEntityGalleryType{
-  type
-  mutability
-  data{
-    gallery{
-      image
-      imageFormats{
-        thumb
-        slider_thumb
-        slider_dot_thumb
-        middle
-        big
-      }
-    }
-  }
-}
-
+let shopModxQuery = `
 
 ## Custom
 
@@ -109,24 +30,60 @@ query apiData(
   
 }
 
-# Сброс серверного кеша
-mutation clearCache{
-  clearCache @storage(store:remote)
-}
-
-
-
-
 query CurrentUser(
+  $currentUser:Boolean = true
+  $userId:Int
+  $userUsername:String
   $getImageFormats:Boolean = true
   $orderGetProducts:Boolean = false
   $orderProductGetProduct:Boolean = false
   $userGetOrder:Boolean = false
+  $userGetOrders:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
 )
 {
+  ...RootUser
+}
+
+query UserById(
+  $currentUser:Boolean
+  $userId:Int!
+  $userUsername:String
+  $getImageFormats:Boolean = true
+  $orderGetProducts:Boolean = false
+  $orderProductGetProduct:Boolean = false
+  $userGetOrder:Boolean = false
+  $userGetOrders:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
+)
+{
+  ...RootUser
+}
+
+query UserByUsername(
+  $currentUser:Boolean
+  $userId:Int
+  $userUsername:String!
+  $getImageFormats:Boolean = true
+  $orderGetProducts:Boolean = false
+  $orderProductGetProduct:Boolean = false
+  $userGetOrder:Boolean = false
+  $userGetOrders:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
+)
+{
+  ...RootUser
+}
+
+fragment RootUser on RootType{
   
   user(
-    ownProfile: true
+    ownProfile:$currentUser
+    id:$userId
+    username:$userUsername
   ) @storage(store:remote)
   {
     ...User
@@ -138,35 +95,7 @@ query CurrentUser(
       ...Order
     }
   }
-}
-
-
-fragment User on ShopModxUserType {
-  ...UserFields
-}
-
-fragment UserFields on ShopModxUserType{
-  id
-  username
-  fullname
-  email
-  active
-  sudo
-  blocked
-  createdon
-  createdby
-  delegate
-  offer
-  offer_date
-  contract_date
-  image
-  imageFormats @include(if:$getImageFormats)
-  {
-    thumb
-    small
-    middle
-    big
-  }
+  
 }
 
 
@@ -228,27 +157,7 @@ query MainMenuData(
 }
 
 
-# Все документы
-query MODXResources(
-  $modxResourcesLimit:Int = 10
-  $modxResourcesPage:Int
-  $withPagination:Boolean = false
-  $modxResourcesContextKey:String = "web"
-  $modxResourcesShowHidden:Boolean
-  $modxResourcesShowUnpublished:Boolean
-  $modxResourcesStorage:ReactCmsStorageStoreType
-  $modxResourcesSort:[MODXResourceSortBy]
-  $modxResourcesParent:Int
-  $modxResourcesTemplates:[Int]
-  $modxResourcesOptions:JSON
-  $modxResourcesUri:String
-  $getImageFormats:Boolean = false
-)
-{
-  
-  ...RootMODXResources
-  
-}
+
 
 
 # Все товары
@@ -416,161 +325,20 @@ fragment CategoryProducts on RootType{
 }
 
 
-query MODXResourceById(
-  $modxResourceId:Int!
-  $getImageFormats:Boolean = false
-  $modxResourcesShowHidden:Boolean
-  $modxResourcesShowUnpublished:Boolean
-)
-{
-  
-  modxResource(
-    id:$modxResourceId
-    showhidden:$modxResourcesShowHidden
-    showunpublished:$modxResourcesShowUnpublished
-  ){
-    ...MODXResource
-  }
-  
-}
-
-query MODXResourceByUri(
-  $modxResourceUri:String!
-  $getImageFormats:Boolean = false
-  $modxResourcesShowHidden:Boolean
-  $modxResourcesShowUnpublished:Boolean
-)
-{
-  
-  modxResource(
-    uri:$modxResourceUri
-    showhidden:$modxResourcesShowHidden
-    showunpublished:$modxResourcesShowUnpublished
-  ){
-    ...MODXResource
-  }
-  
-}
-
-fragment RootMODXResources on RootType{
-  
-  modxResourcesList(
-    limit: $modxResourcesLimit
-    page: $modxResourcesPage
-    context_key: $modxResourcesContextKey
-    showhidden:$modxResourcesShowHidden
-    showunpublished:$modxResourcesShowUnpublished
-    parent:$modxResourcesParent
-    templates:$modxResourcesTemplates
-    uri:$modxResourcesUri
-    sort:$modxResourcesSort
-    options:$modxResourcesOptions
-  ) 
-    @include(if:$withPagination)
-    @storage(store:$modxResourcesStorage)
-  {
-    count
-    total
-    limit
-    page
-    object{
-      ...MODXResource
-    }
-  }
-  
-  modxResources(
-    limit: $modxResourcesLimit
-    page: $modxResourcesPage
-    context_key: $modxResourcesContextKey
-    showhidden:$modxResourcesShowHidden
-    showunpublished:$modxResourcesShowUnpublished
-    parent:$modxResourcesParent
-    templates:$modxResourcesTemplates
-    uri:$modxResourcesUri
-    sort:$modxResourcesSort
-    options:$modxResourcesOptions
-  ) 
-    @skip(if:$withPagination)
-    @storage(store:$modxResourcesStorage)
-  {
-    ...MODXResource
-  }
-  
-}
-
-fragment MODXResource on MODXResourceType{
-  
-  ...MODXResourceFields
-  
-}
-
-fragment MODXResourceFields on MODXResourceType{
-  
-  id
-  pagetitle
-  longtitle
-  description
-  alias
-  link_attributes
-  parent
-  template
-  menuindex
-  menutitle
-  content
-  isfolder
-  published
-  createdby
-  createdon
-  publishedon
-  publishedby
-  pub_date
-  unpub_date
-  deleted
-  deletedon
-  deletedby
-  editedon
-  editedby
-  hidemenu
-  class_key
-  context_key
-  content_type
-  richtext
-  uri
-  uri_override
-  hide_children_in_tree
-  show_in_tree
-  price
-  price_old
-  article
-  image
-  imageFormats @include(if:$getImageFormats)
-  {
-    thumb
-    slider_thumb
-    slider_dot_thumb
-    small
-    middle
-    big
-  }
-  properties
-  tvs
-  _other
-  
-}
-
-
-
-
 query Orders(
-  $ordersLimit:Int = 10
-  $withPagination:Boolean = false
-  $orderGetProducts:Boolean = false
-  $orderProductGetProduct:Boolean = false
-  $getImageFormats:Boolean = false
-){
-  
+  $ordersLimit: Int = 10
+  $withPagination: Boolean = false
+  $orderGetProducts: Boolean = false
+  $orderProductGetProduct: Boolean = false
+  $getImageFormats: Boolean = false
+  $orderGetContractor: Boolean = false
+  $ordersSort: [OrdersSortBy]
+  $ordersContractorId: Int
+  $ordersStatuses:[Int]
+  $ordersPage:Int
+  $orderContractorGetOrders:Boolean = false
+) {
   ...RootOrders
-  
 }
 
 
@@ -579,10 +347,33 @@ query OwnOrder(
   $orderGetProducts:Boolean = false
   $orderProductGetProduct:Boolean = false
   $getImageFormats:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderGetOwn:Boolean = true
+  $orderId:Int
+  $orderContractorGetOrders:Boolean = false
 ){
+  ...RootOrder
+}
+
+
+query OrderById(
+  $orderGetProducts:Boolean = false
+  $orderProductGetProduct:Boolean = false
+  $getImageFormats:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderGetOwn:Boolean
+  $orderId:Int!
+  $orderContractorGetOrders:Boolean = false
+){
+  ...RootOrder
+}
+
+
+fragment RootOrder on RootType{
   
   order(
-    ownOrder: true
+    ownOrder: $orderGetOwn
+    id:$orderId
   )
   @storage(store:remote)
   {
@@ -591,10 +382,15 @@ query OwnOrder(
   
 }
 
+
 fragment RootOrders on RootType{
   
   ordersList(
+    contractor:$ordersContractorId
+    statuses:$ordersStatuses
+    sort: $ordersSort
     limit:$ordersLimit
+    page:$ordersPage
   ) 
   @include(if:$withPagination)
   @storage(store:remote)
@@ -609,7 +405,11 @@ fragment RootOrders on RootType{
   }
   
   orders(
+    contractor:$ordersContractorId
+    statuses:$ordersStatuses
+    sort: $ordersSort
     limit:$ordersLimit
+    page:$ordersPage
   ) 
   @skip(if:$withPagination)
   @storage(store:remote)
@@ -619,15 +419,30 @@ fragment RootOrders on RootType{
   
 }
 
-fragment Order on OrderType{
+fragment Order on OrderType {
   
   ...OrderFields
   
-  Products
-  @include(if:$orderGetProducts)
-  @storage(store:remote)
+  Products 
+  @include(if: $orderGetProducts) 
+  @storage(store: remote) 
   {
     ...OrderProduct
+  }
+  
+  Contractor 
+  @include(if: $orderGetContractor) 
+  @storage(store: remote) 
+  {
+    ...UserFields
+
+    Orders
+    @include(if: $orderContractorGetOrders)
+    @storage(store:remote)
+    {
+      ...OrderFields
+    }
+
   }
   
 }
@@ -732,6 +547,8 @@ mutation OrderAddProduct(
   $orderGetProducts:Boolean = false
   $orderProductGetProduct:Boolean = false
   $getImageFormats:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
 ){
   
   orderAddProduct(
@@ -752,6 +569,8 @@ mutation OrderUpdateProduct(
   $orderGetProducts:Boolean = false
   $orderProductGetProduct:Boolean = false
   $getImageFormats:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
 ){
   
   orderUpdateProduct(
@@ -765,12 +584,51 @@ mutation OrderUpdateProduct(
   
 }
 
+query Users(
+  $usersLimit: Int = 10
+  $getImageFormats: Boolean = false
+  $withPagination: Boolean = false
+  $usersSearchQuery: String
+  $usersStorage: ReactCmsStorageStoreType = remote
+  $orderGetProducts:Boolean = false
+  $orderProductGetProduct:Boolean = false
+  $userGetOrder:Boolean = false
+  $userGetOrders:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
+) {
+  ...RootUsers
+}
+
+fragment User on ShopModxUserType {
+  
+  ...UserFields
+  
+  Order
+  @include(if:$userGetOrder)
+  @storage(store:remote)
+  {
+    ...Order
+  }
+  
+  Orders
+  @include(if:$userGetOrders)
+  @storage(store:remote)
+  {
+    ...Order
+  }
+  
+}
+
+
 # Оформление заказа
 mutation OrderSubmit(
   $orderGetProducts:Boolean = false
   $orderProductGetProduct:Boolean = false
   $getImageFormats:Boolean = false
   $orderParams:JSON
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders: Boolean = false
 ){
   
   orderSubmit(
@@ -783,7 +641,86 @@ mutation OrderSubmit(
   
 }
 
+mutation updateUser(
+  $userId:Int!
+  $userData:JSON!
+  $userGetOrder:Boolean = false
+  $userGetOrders:Boolean = false
+  $getImageFormats:Boolean = false
+  $orderGetProducts:Boolean = false
+  $orderProductGetProduct:Boolean = false
+  $orderGetContractor:Boolean = false
+  $orderContractorGetOrders:Boolean = false
+){
+  
+  updateUser(
+    id:$userId
+    data:$userData
+  )
+  @storage(store:remote)
+  {
+    ...User
+  }
+  
+}
+
+
+query orderStatuses(
+  $ordersStatuses:Int = 0
+  $withPagination:Boolean = false
+){
+  
+  ...RootOrdersStatuses
+  
+}
+
+
+fragment RootOrdersStatuses on RootType{
+  
+  ordersStatusesList(
+    limit:$ordersStatuses
+  )
+  @include(if: $withPagination)
+  @storage(store:remote)
+  {
+    count
+    total
+    page
+    object{
+      ...OrderStatus
+    }
+  }
+  
+  
+  ordersStatuses(
+    limit:$ordersStatuses
+  )
+  @skip(if: $withPagination)
+  @storage(store:remote)
+  {
+    ...OrderStatus
+  }
+  
+}
+
+
+fragment OrderStatus on OrderStatusType{
+  ...OrderStatusFields
+}
+
+fragment OrderStatusFields on OrderStatusType{
+  id
+  status
+  comment
+  rank
+}
+
 
 `;
+
+// shopModxQuery = ``;
+
+const defaultQuery = mergeQuery(ReactCmsQuery, shopModxQuery);
+
 
 export default defaultQuery;

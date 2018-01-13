@@ -32,7 +32,6 @@ class Pagination extends PaginationPrototype{
 
 	getNewLocation = (page) => {
 
-
 		const {
 			router,
 		} = this.context;
@@ -44,92 +43,12 @@ class Pagination extends PaginationPrototype{
 		const {
 			location,
 		} = router;
-
-		// let {
-		// 	location,
-		// } = router;
-
-		// if(typeof window != "undefined"){
-		// 	location = window.location.href;
-		// }
-		// else{
-
-		// }
-
-
-		// if(!location){
-		// 	console.error("Location not defined");
-		// 	return;
-		// }
-
-
-  // 	location = router.getCurrentLocation();
   	
   	let newLocation = router.createLocation(location);
 
   	newLocation.query.page = page > 1 ? page : undefined;
 
   	return router.createPath(newLocation);
-
-
-		// if(browserHistory){
-
-	 //  	location = browserHistory.getCurrentLocation();
-	 //  	location.query.page = page > 1 ? page : undefined;
-
-	 //  	return browserHistory.createPath(location);
-		// }
-		// else{
-
-		// 	return;
-
-		// 	let url = new URL(location, true);
-
-		// 	if(!url){
-		// 		console.error("Error parse url");
-		// 		return;
-		// 	} 
-
-		// 	// Location = url;
-
-		// 	// let blogs = [];
-
-
-
-		// 	let query = url.query || {};
-
-		// 	if(page == 1 || !parseInt(page)){
-		// 		delete query.page;
-		// 	}
-		// 	else{
-		// 		Object.assign(query, {
-		// 			page,
-		// 		});
-		// 	}
-
-
-		// 	url.set("query", query);
-
-		// 	return url.href;
-		// }
-
-
-		// if(page == 1){
-		// 	page = undefined;
-		// }
-
-		// if(browserHistory){
-
-	 //  	let location = browserHistory.getCurrentLocation();
-	 //  	location.query.page = page;
-
-	 //  	return browserHistory.createPath(location);
-		// }
-		// else{
-		// 	return `?page=${page}`
-		// }
-
-		// return;
 	}
 
 	render(){

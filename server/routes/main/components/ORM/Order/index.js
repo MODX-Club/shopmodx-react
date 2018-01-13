@@ -38,7 +38,7 @@ export const getList = (object, args, context, info) => {
 
     }
 
-    const url = `/assets/components/shopmodx/connectors/connector.php?pub_action=${action}`;
+    const url = `/assets/components/modxsite/connectors/connector.php?pub_action=${action}`;
 
     let params = Object.assign({...args}, {
       id,

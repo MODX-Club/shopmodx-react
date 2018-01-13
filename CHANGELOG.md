@@ -1,4 +1,16 @@
 
+1.3.0
+========================================
+- Code refactoring
+- Added Orders Page
+- Added Order Page
+- Added Users Page
+- Added Orders query sort
+- Added Orders contractor condition
+- Added ORM/OrderStatus
+- Added OrderProductsView
+
+
 1.2.3
 ========================================
 - Code refactoring

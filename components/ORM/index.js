@@ -46,6 +46,7 @@ import MODXResourceType, {
 
 import UserType, {
   UsersArgs,
+  Mutations as UserMutations,
 } from './modUser';
 
 
@@ -54,6 +55,12 @@ import OrderType, {
   OrdersArgs,
   OrderMutations,
 } from 'modules/Site/components/ORM/Order';
+
+
+import OrderStatusType, {
+  OrderStatusArgs,
+  OrderStatusesArgs,
+} from './OrderStatus';
 
 
 
@@ -173,6 +180,23 @@ export default new GraphQLObjectType({
       args: OrderArgs,
     },
 
+    ordersStatusesList: new listField({
+      type: OrderStatusType,
+      name: "orderStatusesList",
+      description: "Список статусов заказов с постраничностью",
+      args: OrderStatusesArgs,
+    }),
+    ordersStatuses: {
+      type: new GraphQLList(OrderStatusType),
+      description: "Список статусов заказов",
+      args: OrderStatusesArgs,
+    },
+    orderStatus: {
+      type: OrderStatusType,
+      description: OrderStatusType.description,
+      args: OrderStatusArgs,
+    },
+
     ordersProductsList: new listField({
       type: OrderProductType,
       name: "orderProductsList",
@@ -202,8 +226,11 @@ const mutationFields = Object.assign({
     },
   }, {
     ...OrderMutations,
+  }, {
+    ...UserMutations,
   }
 );
+
 
 export const Mutation = new GraphQLObjectType({ //⚠️ NOT mutiation
   name: 'Mutation',

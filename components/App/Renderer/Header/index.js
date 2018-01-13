@@ -66,16 +66,17 @@ export default class Header extends Component{
       
       </Grid>
 
-      <Grid
+      {/* <Grid
         item
         xs={12}
         md
       >
 
-      </Grid>
+      </Grid> */}
 
       <Grid
         item
+        xs
       >
     
         <MainMenu 

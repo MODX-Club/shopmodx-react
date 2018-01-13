@@ -22,9 +22,15 @@ import { List } from 'immutable';
 // import UserNoticeType from '../UserNotice';
 
 import {
+  UserType,
+} from '../modUser';
+
+import {
   listField,
   listArgs,
   imageType,
+  order,
+  // SortBy,
   // ObjectsListType,
 } from '../fields';
 
@@ -32,6 +38,44 @@ import {
 // import MODXResourceType from '../MODXResource';
 
 import OrderProductType from '../OrderProduct';
+
+
+
+export const OrdersSortBy = new GraphQLInputObjectType({
+  name: "OrdersSortBy",
+  description: "Сортировка заказов",
+  fields: {
+    by: {
+      type: new GraphQLEnumType({
+        name: 'OrdersSortByValues',
+        values: {
+          id: {
+            value: 'id',
+            description: 'По ID',
+          },
+          createdon: {
+            value: 'createdon',
+            description: 'По Дате создания',
+          },
+          editedon: {
+            value: 'editedon',
+            description: 'По Дате последнего изменения',
+          },
+          status_id: {
+            value: 'status_id',
+            description: 'По Статусу',
+          },
+          rand: {
+            value: 'rand()',
+            description: 'В случайном порядке',
+          },
+        },
+      }),
+      description: 'Способ сортировки',
+    },
+    dir: order,
+  },
+});
 
 
 export const OrderArgs = {
@@ -47,7 +91,20 @@ export const OrderArgs = {
 
 
 export const OrdersArgs = Object.assign({
-}, listArgs);
+}, listArgs, {
+  contractor: {
+    type: GraphQLInt,
+    description: "ID клиента",
+  },
+  statuses: {
+    type: new GraphQLList(GraphQLInt),
+    description: "Фильтр заказов по статусам",
+  },
+  sort: {
+    type: new GraphQLList(OrdersSortBy),
+    description: OrdersSortBy.description,
+  },
+});
 
 
 const OrderType = new GraphQLObjectType({
@@ -163,6 +220,32 @@ const OrderType = new GraphQLObjectType({
 
           Object.assign(args, {
             order: id,
+            // _store: "remote",
+          });
+
+          return rootResolver(null, args, context, info);
+
+        },
+      },
+      Contractor: {
+        type: UserType,
+        description: "Клиент",
+        resolve: (source, args, context, info) => {
+
+          const {
+            contractor,
+          } = source;
+
+          if(!contractor){
+            return null;
+          }
+
+          const {
+            rootResolver,
+          } = context;
+
+          Object.assign(args, {
+            id: contractor,
             // _store: "remote",
           });
 
