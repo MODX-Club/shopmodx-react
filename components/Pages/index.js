@@ -135,13 +135,11 @@ export default class ShopmodxPage extends PageLayout{
 		else{
 
 			const {
-				user: {
-					user,
-				},
+				user,
 			} = this.context;
 
 			Object.assign(result.data, {
-				user,
+				user: user && user.user || undefined,
 			});
 
 		}

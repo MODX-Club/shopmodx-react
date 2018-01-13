@@ -1,4 +1,8 @@
 
+1.3.1
+========================================
+- Fix Page::loadServerData()
+
 1.3.0
 ========================================
 - Code refactoring
@@ -9,7 +13,6 @@
 - Added Orders contractor condition
 - Added ORM/OrderStatus
 - Added OrderProductsView
-
 
 1.2.3
 ========================================

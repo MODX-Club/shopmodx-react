@@ -7,7 +7,19 @@ export default class ShopModxUserPage extends ReactCmsUserPage{
 
 	async loadServerData(provider, options = {}){
 
-    let result = await Page.prototype.loadServerData(provider, options);
+    let result;
+    
+    if(typeof window !== "undefined"){
+
+      result = await Page.prototype.loadServerData.call(this, provider, options);
+      
+    }
+    else{
+
+      result = await Page.prototype.loadServerData(provider, options);
+
+    }
+
     let result2 = await super.loadServerData(provider, options);
 
     if(result && result2){
